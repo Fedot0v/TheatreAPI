@@ -1,13 +1,25 @@
 from datetime import datetime
 
 from django.shortcuts import render
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiExample
+)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from theatre.models import Play, Genre, Actor, Reservation, TheatreHall, Performance, Ticket
+from theatre.models import (
+    Play,
+    Genre,
+    Actor,
+    Reservation,
+    TheatreHall,
+    Performance,
+    Ticket
+)
 from theatre.serializers import (
     PlayDetailSerializer,
     PlaySerializer,
@@ -16,8 +28,14 @@ from theatre.serializers import (
     GenreDetailSerializer,
     ActorSerializer,
     ActorDetailSerializer,
-    ActorImageSerializer, PlayListSerializer, ReservationSerializer, TheatreHallSerializer, PerformanceSerializer,
-    TicketSerializer, PerformanceListSerializer, PerformanceDetailSerializer
+    ActorImageSerializer,
+    PlayListSerializer,
+    ReservationSerializer,
+    TheatreHallSerializer,
+    PerformanceSerializer,
+    TicketSerializer,
+    PerformanceListSerializer,
+    PerformanceDetailSerializer
 )
 from theatre.utils import params_to_int
 
