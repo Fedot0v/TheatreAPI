@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.shortcuts import render
 from drf_spectacular.utils import (
     extend_schema,
     OpenApiParameter,
