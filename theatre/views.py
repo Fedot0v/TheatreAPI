@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from theatre.models import Play, Genre, Actor
+from theatre.models import Play, Genre, Actor, Reservation, TheatreHall, Performance
 from theatre.serializers import (
     PlayDetailSerializer,
     PlaySerializer,
@@ -13,8 +15,9 @@ from theatre.serializers import (
     GenreDetailSerializer,
     ActorSerializer,
     ActorDetailSerializer,
-    ActorImageSerializer
+    ActorImageSerializer, PlayListSerializer, ReservationSerializer, TheatreHallSerializer, PerformanceSerializer
 )
+from theatre.utils import params_to_int
 
 
 class ImageUploadMixin:
@@ -112,3 +115,49 @@ class PlayViewSet(viewsets.ModelViewSet):
             return PlayImageSerializer
 
         return PlaySerializer
+
+
+class TheatreHallViewSet(viewsets.ModelViewSet):
+    queryset = TheatreHall.objects.all()
+    serializer_class = TheatreHallSerializer
+
+
+class ReservationViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.prefetch_related(
+        "tickets__performance__play",
+        "tickets__performance__theatre_hall"
+    )
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        print(self.request.data)
+        serializer.save(user=self.request.user)
+
+
+class PerformanceViewSet(viewsets.ModelViewSet):
+    queryset = Performance.objects.all()
+    serializer_class = PerformanceSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        play = self.request.query_params.get("play")
+        theatre_hall = self.request.query_params.get("theatre_hall")
+        date = self.request.query_params.get("date")
+
+        if play:
+            play_ids = params_to_int(play)
+            queryset = queryset.filter(play_id__in=play_ids)
+
+        if theatre_hall:
+            theatre_hall_ids = params_to_int(theatre_hall)
+            queryset = queryset.filter(theatre_hall_id__in=theatre_hall_ids)
+
+        if date:
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+            queryset = queryset.filter(show_time__date=date)
+
+        return queryset
