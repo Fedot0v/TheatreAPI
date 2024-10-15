@@ -51,8 +51,18 @@ class Play(models.Model):
         null=True,
         blank=True
     )
-    actors = models.ManyToManyField(Actor)
-    genres = models.ManyToManyField(Genre)
+    actors = models.ManyToManyField(
+        Actor,
+        null=True,
+        blank=True,
+        related_name="plays"
+    )
+    genres = models.ManyToManyField(
+        Genre,
+        null=True,
+        blank=True,
+        related_name="plays"
+    )
 
     def __str__(self):
         return self.title
