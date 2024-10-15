@@ -91,6 +91,25 @@ class Performance(models.Model):
                 f" Show time: {self.show_time}"
         )
 
+    def get_taken_seats(self):
+        """Returns a list of seats taken by the play"""
+        return Ticket.objects.filter(
+            performance=self).values_list("row", "seat")
+
+    def get_free_seats(self):
+        """Returns a list of free seats for this performance."""
+        total_rows = self.theatre_hall.rows
+        seats_in_row = self.theatre_hall.seats_in_row
+        occupied_seats = set(self.get_taken_seats())
+
+        free_seats = []
+
+        for row in range(1, total_rows + 1):
+            for seat in range(1, seats_in_row + 1):
+                if (row, seat) not in occupied_seats:
+                    free_seats.append((row, seat))
+        return free_seats
+
 
 class Ticket(models.Model):
     row = models.IntegerField()
