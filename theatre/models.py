@@ -11,13 +11,15 @@ from TheatreAPIService import settings
 
 def create_custom_path(instance, filename):
     _, ext = os.path.splitext(filename)
+    uploads_dir = os.path.join("uploads", "images")
+
     if isinstance(instance, Play):
         return os.path.join(
-            "uploads/images/", f"{slugify(instance.title)}-{uuid.uuid4()}{ext}"
+            uploads_dir, f"{slugify(instance.title)}-{uuid.uuid4()}{ext}"
         )
     if isinstance(instance, Actor):
         return os.path.join(
-            "uploads/images/", f"{slugify(instance.last_name)}-{uuid.uuid4()}{ext}"
+            uploads_dir, f"{slugify(instance.last_name)}-{uuid.uuid4()}{ext}"
         )
 
 
