@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from theatre.models import Play, Genre, Actor, Reservation, TheatreHall, Performance
+from theatre.models import Play, Genre, Actor, Reservation, TheatreHall, Performance, Ticket
 from theatre.serializers import (
     PlayDetailSerializer,
     PlaySerializer,
@@ -15,7 +15,8 @@ from theatre.serializers import (
     GenreDetailSerializer,
     ActorSerializer,
     ActorDetailSerializer,
-    ActorImageSerializer, PlayListSerializer, ReservationSerializer, TheatreHallSerializer, PerformanceSerializer
+    ActorImageSerializer, PlayListSerializer, ReservationSerializer, TheatreHallSerializer, PerformanceSerializer,
+    TicketSerializer
 )
 from theatre.utils import params_to_int
 
@@ -161,3 +162,8 @@ class PerformanceViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(show_time__date=date)
 
         return queryset
+
+
+class TicketModelViewSet(viewsets.ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
