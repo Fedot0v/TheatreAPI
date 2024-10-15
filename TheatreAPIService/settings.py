@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_spectacular',
     'theatre',
     'user',
 ]
@@ -154,3 +155,15 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {"anon": "100/day", "user": "500/day"},
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Theatre API Service',
+    'DESCRIPTION': 'Reserv tickets for your theatre session.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'defaultModelRendering': 'model',
+        'defaultModelsExpandDepth': 2,
+        'defaultModelExpandDepth': 2,
+    }
+}
